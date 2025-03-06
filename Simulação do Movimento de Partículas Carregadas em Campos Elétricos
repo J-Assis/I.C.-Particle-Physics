@@ -1,0 +1,36 @@
+import matplotlib.pyplot as plt
+
+# Variáveis
+feletrica = 1000
+c = 0.000001
+m = 0.001
+vo = 10
+tt = 10
+
+px = 0
+py = 0
+
+# Listas p guardar as posições em relação ao tempo
+lx = []
+ly = []
+
+# Posições da partícula a cada segundo
+for tempo in range(tt + 1):
+
+    # posição x
+    aceleracao = feletrica * c / m
+    posicao_x_atual = px + 0.5 * aceleracao * tempo**2
+    lx.append(posicao_x_atual)
+
+    # posição y
+    py_atual = py + vo * tempo
+    ly.append(py_atual)
+
+#Gráfico
+plt.figure(figsize=(8, 6))  # Tamanho do gráfico
+plt.plot(lx, ly)  # Plotando as posições
+plt.title("Caminho da Partícula")  # Título do gráfico
+plt.xlabel("Posição X (metros)")  # Nome do eixo X
+plt.ylabel("Posição Y (metros)")  # Nome do eixo Y
+plt.grid(True)  # Mostra linhas de grade
+plt.show()  # Mostra o gráfico
