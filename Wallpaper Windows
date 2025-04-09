@@ -1,0 +1,47 @@
+import math
+import numpy as np
+import plotly.graph_objects as go
+
+# Parâmetros
+q = 1.6e-19  # Carga da partícula (Coulombs)
+m = 9.11e-31 # Massa da partícula (kg)
+B = 0.01     # Campo magnético (Tesla)
+v = 2e5      # Velocidade total (m/s) **(Reduzida para melhor visualização)**
+
+# Componentes da velocidade
+ang = np.radians(30)  # Ângulo da velocidade com o campo magnético
+vz = v * np.cos(ang)  # Componente paralela ao campo magnético
+vr = v * np.sin(ang)  # Componente perpendicular (causa rotação)
+
+# Cálculo do raio da trajetória
+r = (m * vr) / (abs(q) * B)  # Fórmula r = (m * vr) / (q * B)
+
+# Cálculo da frequência ciclotron
+f = abs(q) * B / (2 * math.pi * m)  # f = (q * B) / (2 * pi * m)
+
+# Cálculo da velocidade angular
+w = 2 * np.pi * f  # w = 2 * pi * f
+
+# Definição do tempo
+tmax = 5e-6  # Tempo total da simulação aumentado para visualização
+n = 1000  # Número de pontos na simulação
+t = np.linspace(0, tmax, n)  # Array de tempo de 0 a tmax
+
+# Cálculo da trajetória helicoidal
+x = r * np.cos(w * t)  # Movimento circular no eixo X
+y = r * np.sin(w * t)  # Movimento circular no eixo Y
+z = vz * t  # Movimento ascendente no eixo Z
+
+# Criar gráfico interativo
+fig = go.Figure(go.Scatter3d(
+    x=x, y=y, z=z,
+    mode='lines', line=dict(color='blue', width=2)
+))
+
+fig.update_layout(
+    title='Trajetória de uma Partícula Carregada no Campo Magnético',
+    scene=dict(xaxis_title='X (m)', yaxis_title='Y (m)', zaxis_title='Z (m)')
+)
+
+# Mostrar o gráfico
+fig.show()
