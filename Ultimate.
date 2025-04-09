@@ -1,0 +1,45 @@
+import math
+import numpy as np
+import plotly.graph_objects as go
+
+# Parâmetros
+q = 1.6e-19  # Carga da partícula (Coulombs)
+m = 9.11e-31 # Massa da partícula (kg)
+B = 0.0001    # Campo magnético (Tesla)
+v = 2e5      # Velocidade total (m/s)
+
+# Componentes da velocidade (ângulo menor para menos rotação)
+ang = np.radians(1)  #Reduzi para diminuir a rotação
+vz = v * np.cos(ang)  # Movimento para cima
+vr = v * np.sin(ang)  # Movimento circular (bem pequeno)
+
+# Cálculo do raio e frequência
+r = (m * vr) / (abs(q) * B)  # Raio da trajetória (muito pequeno) 	(Raio da rotação circular no plano XY)
+f = abs(q) * B / (2 * math.pi * m)  # Frequência ciclotron (quantas voltas por segundo)
+w = 2 * np.pi * f  # Velocidade angular
+
+#Tempo de simulação
+tmax = 5e-6  #Tempo total
+n = 1000  # Número de pontos
+t = np.linspace(0, tmax, n) # O np.linspace(0, tmax, n) cria uma sequência de valores de tempo igualmente espaçados, começando em 0 e terminando em tmax. Esses valores representam os instantes nos quais a posição da partícula será calculada. Funciona como um for que gera n valores igualmente espaçados entre 0 e tmax, mas de maneira vetorizada e eficiente.
+
+# Cálculo da trajetória (quase uma linha)
+x = (r * np.cos(w * t)) * 1e6 #Convertendo para micrômetros # Pequeno deslocamento circular
+y = (r * np.sin(w * t)) * 1e6 #Pequeno deslocamento circular
+z = vz * t # Movimento ascendente dominante
+
+
+# Criar gráfico interativo
+fig = go.Figure(go.Scatter3d(
+    x=x, y=y, z=z,
+    mode='lines', line=dict(color='blue', width=2)
+))
+
+fig.update_layout(
+    title='Trajetória de uma Partícula Carregada no Campo Magnético',
+    scene=dict(xaxis_title='X (m)', yaxis_title='Y (m)', zaxis_title='Z (m)')
+)
+
+# Mostrar o gráfico
+fig.show()
+print (r)
